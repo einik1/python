@@ -22,13 +22,20 @@ while True:
         if current_socket == server_socket:
             (new_socket, address) = server_socket.accept()
             open_client_sockets.append(new_socket)
-            print "new cliient"
+            print "new client"
         else:
-            data = current_socket.recv(1024)
+            data = current_socket.recv(1024).lower()
             if data == "":
                 open_client_sockets.remove(current_socket)
-                print ' connection with client is over'
+                print 'connection with client is over'
             else:
-                messages_to_send.append((current_socket, 'Hello, ' + data))
-                print data
+                if data == "time":
+                    messages_to_send.append((current_socket, 'the time is : 12:00'))
+                elif data == "name":
+                    messages_to_send.append((current_socket, 'my name is kobi'))
+                elif data == "rand":
+                    messages_to_send.append((current_socket, 'randum num'))
+                else:
+                     messages_to_send.append((current_socket, 'you want me to doo what?!?!?!?!'))
+                'messages_to_send.append((current_socket, hello + data))'
     send_waiting_messages(wlist, messages_to_send)
