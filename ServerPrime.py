@@ -18,8 +18,6 @@ server_socket.listen(5)
 open_client_sockets = []
 messages_to_send = []
 numberOfClients = 0
-start_time =time.time()
-counters = dict()
 
 print 'server is running!! waiting for clients...'
 while True:
@@ -28,25 +26,12 @@ while True:
         if current_socket == server_socket:
             (new_socket, address) = server_socket.accept()
             open_client_sockets.append(new_socket)
-            counters[new_socket] = 0
             numberOfClients += 1
             print "connected to IP: %s , port: %s. number of clients is %s \n" % (address[0], address[1], numberOfClients)
         else:
             data = current_socket.recv(1024).lower()
-            counters[current_socket] += 1
-            if time.time() - start_time > 0.1:
-                if counters[current_socket] > 100:
-                    open_client_sockets.remove(current_socket)
-                    del counters[current_socket]
-                    numberOfClients -= 1
-                    print 'connection with a client is over. numer of clients is {}\n'.format(str(numberOfClients))
-                    continue
-                else:
-                    start_time = time.time()
-                    counters[current_socket] = 0
-            if data == "bye":
+            if data == "exit":
                 open_client_sockets.remove(current_socket)
-                del counters[current_socket]
                 numberOfClients -= 1
                 print 'connection with a client is over. numer of clients is {}\n'.format(str(numberOfClients))
             else:
